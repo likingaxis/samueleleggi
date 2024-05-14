@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const image = document.getElementById('image');
     const indovinello = document.getElementById('indovinello');
     // Imposta la data e l'ora dell'evento (es. 1 gennaio 2024, 00:00:00)
-    const eventDate = new Date('2024-05-13T00:00:00');
+    const eventDate = new Date('2024-05-14T18:46:00');
 
     function updateTimeCounter() {
         const now = new Date();
