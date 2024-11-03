@@ -6,18 +6,40 @@
     <title>Progressione di Jacopo</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; margin: 0; padding: 20px; }
-        h1 { text-align: center; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('JACOPO.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        h1 { text-align: center; color: #333; }
+        
+        #progressChartContainer {
+            background: rgba(255, 255, 255, 0.9); /* Opacità del 90% */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
         canvas { max-width: 600px; }
     </style>
 </head>
 <body>
 
 <h1>Tracciamento della Progressione di Jacopo</h1>
-<canvas id="progressChart"></canvas>
+
+<div id="progressChartContainer">
+    <canvas id="progressChart"></canvas>
+</div>
 
 <script>
-    // Sostituisci con il tuo URL API di SheetBest
     const sheetApiUrl = "https://api.sheetbest.com/sheets/9ab4f8b3-69f9-4632-aec0-f798c18fba26"; 
 
     async function fetchData() {
