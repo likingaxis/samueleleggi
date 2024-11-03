@@ -3,47 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tempo Trascorso</title>
+    <title>Progressione di Jacopo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-body {
-    font-family: Arial, sans-serif;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background-color: #f0f0f0;
-}
-        #time-counter {
-            font-size: 2em;
-            background: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        #image {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-#image {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; margin: 0; padding: 20px; }
+        h1 { text-align: center; }
+        canvas { max-width: 600px; }
     </style>
 </head>
 <body>
-    <div id="container"></div>
-    <div id="time-counter"></div>
-    <br><br>
-    <div id ="image" ></div>
-    <div id ="indovinello" ></div>
-    <script src="script.js"></script>
-</div>
+
+<h1>Tracciamento della Progressione di Jacopo</h1>
+<canvas id="progressChart"></canvas>
+
+<script>
+    // Sostituisci con il tuo URL API di SheetBest
+    const sheetApiUrl = "https://api.sheetbest.com/sheets/9ab4f8b3-69f9-4632-aec0-f798c18fba26"; 
+
+    async function fetchData() {
+        try {
+            const response = await fetch(sheetApiUrl);
+            if (!response.ok) throw new Error("Errore nel recupero dei dati dall'API");
+            const data = await response.json();
+            return parseData(data);
+        } catch (error) {
+            console.error("Errore durante il recupero dei dati:", error);
+            alert("Impossibile recuperare i dati. Verifica l'URL dell'API.");
+        }
+    }
+
+    function parseData(data) {
+        const dates = [];
+        const levels = [];
+        
+        data.forEach(row => {
+            if (row.Data && row.Livello) {
+                dates.push(row.Data);
+                levels.push(parseInt(row.Livello));
+            }
+        });
+        return { dates, levels };
+    }
+
+    async function updateChart() {
+        const { dates, levels } = await fetchData();
+
+        if (!dates || dates.length === 0 || !levels || levels.length === 0) {
+            console.error("Dati non validi. Assicurati che il foglio contenga dati corretti.");
+            alert("Dati non validi. Verifica il contenuto del Google Sheet.");
+            return;
+        }
+
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Livello di Jacopo',
+                    data: levels,
+                    borderColor: 'blue',
+                    fill: false,
+                    lineTension: 0.1,
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Data' }},
+                    y: { title: { display: true, text: 'Livello' }, min: 0 }
+                }
+            }
+        });
+    }
+
+    // Aggiorna il grafico all'apertura della pagina
+    updateChart();
+</script>
+
 </body>
 </html>
